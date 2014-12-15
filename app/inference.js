@@ -47,12 +47,23 @@ InferenceEngine.prototype.hasNoun = function(noun) {
           && this.graph.hasVertex(this.inverse(noun)));
 };
 
+InferenceEngine.prototype.hasRelationship = function(nounA, nounB) {
+
+};
 
 /************************************
  * InferenceEngine Teaching Methods *
  ************************************/
 InferenceEngine.prototype.teachAllAre = function(nounA, nounB) {
-
+  // [TODO]: check for contradictions
+  var inverseA = this.inverse(nounA);
+  var inverseB = this.inverse(nounB);
+  this.graph.addEdge(nounA, nounB, 1);
+  this.graph.addEdge(inverseB, inverseA, 1);
+  this.graph.addEdge(inverseA, nounB, 0);
+  this.graph.addEdge(inverseB, nounA, 0);
+  this.graph.addEdge(nounA, inverseB, 0);
+  this.graph.addEdge(nounB, inverseA, 0);
 };
 
 InferenceEngine.prototype.teachNoAre = function() {

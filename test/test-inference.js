@@ -89,4 +89,17 @@ describe('InferenceEngine', function() {
   });
 
 
+  describe('.teachAllAre()', function() {
+    var engine = new InferenceEngine();
+    var nounA = 'dogs';
+    var nounB = 'cats';
+    engine.addNoun(nounA);
+    engine.addNoun(nounB);
+
+    it('should not yet have an edge from nounA to nounB', function() {
+
+    });
+
+  });
+
 });
