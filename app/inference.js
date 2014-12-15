@@ -15,6 +15,7 @@ function InferenceEngine() {
   this.graph = new Graph();
 }
 
+
 /**********************************
  * InferenceEngine Public Methods *
  **********************************/
@@ -27,10 +28,11 @@ InferenceEngine.prototype.negate = function(definition) {
 };
 
 InferenceEngine.prototype.inverse = function(noun) {
-  return 'no ' + noun;
+  // Use underscore to remove quotes from object key
+  return 'no_' + noun;
 };
 
-InferenceEngine.prototype.addNoun = function(noun, truth) {
+InferenceEngine.prototype.addNoun = function(noun) {
   var inverseNoun = this.inverse(noun);
   this.graph.addVertex(noun);
   this.graph.addVertex(inverseNoun);
@@ -38,6 +40,46 @@ InferenceEngine.prototype.addNoun = function(noun, truth) {
   this.graph.addEdge(inverseNoun, inverseNoun, 1);
   this.graph.addEdge(noun, inverseNoun, 0);
   this.graph.addEdge(inverseNoun, noun, 0);
+};
+
+
+/************************************
+ * InferenceEngine Teaching Methods *
+ ************************************/
+InferenceEngine.prototype.teachAllAre = function() {
+
+};
+
+InferenceEngine.prototype.teachNoAre = function() {
+
+};
+
+InferenceEngine.prototype.teachSomeAre = function() {
+
+};
+
+InferenceEngine.prototype.teachSomeAreNot = function() {
+
+};
+
+
+/*********************************
+ * InferenceEngine Query Methods *
+ *********************************/
+InferenceEngine.prototype.queryAreAll = function() {
+
+};
+
+InferenceEngine.prototype.queryAreNo = function() {
+
+};
+
+InferenceEngine.prototype.queryAreSome = function() {
+
+};
+
+InferenceEngine.prototype.queryAreSomeNot = function() {
+
 };
 
 module.exports = InferenceEngine;

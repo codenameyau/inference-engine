@@ -27,7 +27,7 @@ describe('InferenceEngine', function() {
     var engine = new InferenceEngine();
     var graph = engine.getGraph();
     var noun = 'dogs';
-    var inverseNoun = 'no dogs';
+    var inverseNoun = engine.inverse(noun);
     engine.addNoun(noun);
 
     it('should add a new vertex to its graph for the noun', function() {
