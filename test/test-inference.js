@@ -69,4 +69,24 @@ describe('InferenceEngine', function() {
     });
   });
 
+
+  describe('.hasNoun()', function() {
+    var engine = new InferenceEngine();
+    var nounA = 'dogs';
+    var nounB = 'cats';
+
+    it('should not have noun because it is not yet added', function() {
+      assert.isFalse(engine.hasNoun(nounA));
+      assert.isFalse(engine.hasNoun(nounB));
+    });
+
+    it('should have nouns after adding them to the engine', function() {
+      engine.addNoun(nounA);
+      engine.addNoun(nounB);
+      assert.isTrue(engine.hasNoun(nounA));
+      assert.isTrue(engine.hasNoun(nounB));
+    });
+  });
+
+
 });

@@ -42,11 +42,16 @@ InferenceEngine.prototype.addNoun = function(noun) {
   this.graph.addEdge(inverseNoun, noun, 0);
 };
 
+InferenceEngine.prototype.hasNoun = function(noun) {
+  return (this.graph.hasVertex(noun) 
+          && this.graph.hasVertex(this.inverse(noun)));
+};
+
 
 /************************************
  * InferenceEngine Teaching Methods *
  ************************************/
-InferenceEngine.prototype.teachAllAre = function() {
+InferenceEngine.prototype.teachAllAre = function(nounA, nounB) {
 
 };
 
