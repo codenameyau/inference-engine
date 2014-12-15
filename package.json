@@ -1,0 +1,34 @@
+{
+  "name": "inference-engine",
+  "version": "1.0.0",
+  "description": "inference engine based on a truth management system",
+  "main": "app/inference.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codenameyau/inference-engine.git"
+  },
+  "keywords": [
+    "inference",
+    "engine",
+    "ai",
+    "project"
+  ],
+  "author": "Jorge Yau <jyau01citymail.cuny.edu>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codenameyau/inference-engine/issues"
+  },
+  "homepage": "https://github.com/codenameyau/inference-engine",
+  "devDependencies": {
+    "chai": "^1.10.0"
+  },
+  "dependencies": {
+    "directed-graph": "^1.0.2"
+  }
+}
