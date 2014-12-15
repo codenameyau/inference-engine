@@ -36,6 +36,8 @@ InferenceEngine.prototype.addNoun = function(noun, truth) {
   this.graph.addVertex(inverseNoun);
   this.graph.addEdge(noun, noun, 1);
   this.graph.addEdge(inverseNoun, inverseNoun, 1);
+  this.graph.addEdge(noun, inverseNoun, 0);
+  this.graph.addEdge(inverseNoun, noun, 0);
 };
 
 module.exports = InferenceEngine;

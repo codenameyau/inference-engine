@@ -40,14 +40,24 @@ describe('InferenceEngine', function() {
       assert.strictEqual(graph.getSize(), 2);
     });
 
-    it('should create edge linking dogs to itself with weight of 1', function() {
+    it('should create edge linking NOUN to itself with weight of 1', function() {
       assert.isTrue(graph.hasEdge(noun, noun));
       assert.strictEqual(graph.getWeight(noun, noun), 1);
     });
 
-    it('should create edge linking no-dogs to itself with weight of 1', function() {
+    it('should create edge linking NO-NOUN to itself with weight of 1', function() {
       assert.isTrue(graph.hasEdge(inverseNoun, inverseNoun));
       assert.strictEqual(graph.getWeight(inverseNoun, inverseNoun), 1);
+    });
+
+    it('should create edge linking NOUN to NO-NOUN with weight of 0', function() {
+      assert.isTrue(graph.hasEdge(noun, inverseNoun));
+      assert.strictEqual(graph.getWeight(noun, inverseNoun), 0);
+    });
+
+    it('should create edge linking NO-NOUN to NOUN with weight of 0', function() {
+      assert.isTrue(graph.hasEdge(noun, inverseNoun));
+      assert.strictEqual(graph.getWeight(noun, inverseNoun), 0);
     });
 
     it('should not replace any existing nouns with the same name', function() {
