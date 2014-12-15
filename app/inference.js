@@ -47,9 +47,11 @@ InferenceEngine.prototype.hasNoun = function(noun) {
           && this.graph.hasVertex(this.inverse(noun)));
 };
 
-InferenceEngine.prototype.hasRelationship = function(nounA, nounB) {
-
+InferenceEngine.prototype.hasDirectRelationship = function(nounA, nounB) {
+  return (this.graph.hasEdge(nounA, nounB)
+          && this.graph.hasEdge(nounB, nounA));
 };
+
 
 /************************************
  * InferenceEngine Teaching Methods *
