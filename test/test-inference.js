@@ -11,10 +11,20 @@ describe('InferenceEngine', function() {
 
   // Reusable engine for testing
   var globalEngine = new InferenceEngine();
-  var nounA = 'dogs';
-  var nounB = 'cats';
-  var inverseA = globalEngine.inverse(nounA);
-  var inverseB = globalEngine.inverse(nounB);
+
+  // Define nouns
+  var noun = [];
+  noun[0] = 'dogs';
+  noun[1] = 'mammals';
+  noun[2] = 'hairy animals';
+  noun[3] = 'cats';
+
+  // Get inverse of nouns
+  var inverse = [];
+  for (var i=0, l=noun.length; i<l; i++) {
+    inverse.push(globalEngine.inverse(noun[i]));
+  }
+
 
   describe('.negate()', function() {
     it('should return false if the argument is true', function() {
@@ -30,44 +40,44 @@ describe('InferenceEngine', function() {
   describe('.addNoun()', function() {
     var engine = new InferenceEngine();
     var graph = engine.getGraph();
-    engine.addNoun(nounA);
+    engine.addNoun(noun[0]);
 
     it('should add a new vertex to its graph for the noun', function() {
-      assert.isTrue(graph.hasVertex(nounA));
+      assert.isTrue(graph.hasVertex(noun[0]));
       assert.strictEqual(graph.getSize(), 2);
     });
 
     it('should add a new vertex to its graph for not that noun', function() {
-      assert.isTrue(graph.hasVertex(inverseA));
+      assert.isTrue(graph.hasVertex(inverse[0]));
       assert.strictEqual(graph.getSize(), 2);
     });
 
     it('should create edge linking NOUN to itself with weight of 1', function() {
-      assert.isTrue(graph.hasEdge(nounA, nounA));
-      assert.strictEqual(graph.getWeight(nounA, nounA), 1);
+      assert.isTrue(graph.hasEdge(noun[0], noun[0]));
+      assert.strictEqual(graph.getWeight(noun[0], noun[0]), 1);
     });
 
     it('should create edge linking NO-NOUN to itself with weight of 1', function() {
-      assert.isTrue(graph.hasEdge(inverseA, inverseA));
-      assert.strictEqual(graph.getWeight(inverseA, inverseA), 1);
+      assert.isTrue(graph.hasEdge(inverse[0], inverse[0]));
+      assert.strictEqual(graph.getWeight(inverse[0], inverse[0]), 1);
     });
 
     it('should create edge linking NOUN to NO-NOUN with weight of 0', function() {
-      assert.isTrue(graph.hasEdge(nounA, inverseA));
-      assert.strictEqual(graph.getWeight(nounA, inverseA), 0);
+      assert.isTrue(graph.hasEdge(noun[0], inverse[0]));
+      assert.strictEqual(graph.getWeight(noun[0], inverse[0]), 0);
     });
 
     it('should create edge linking NO-NOUN to NOUN with weight of 0', function() {
-      assert.isTrue(graph.hasEdge(nounA, inverseA));
-      assert.strictEqual(graph.getWeight(nounA, inverseA), 0);
+      assert.isTrue(graph.hasEdge(noun[0], inverse[0]));
+      assert.strictEqual(graph.getWeight(noun[0], inverse[0]), 0);
     });
 
     it('should not replace any existing nouns with the same name', function() {
-      var nounRefA = graph.getNeighbors(nounA);
-      var nounRefB = graph.getNeighbors(inverseA);
-      engine.addNoun(nounA);
-      assert.deepEqual(graph.getNeighbors(nounA), nounRefA);
-      assert.deepEqual(graph.getNeighbors(inverseA), nounRefB);
+      var nounRefA = graph.getNeighbors(noun[0]);
+      var nounRefB = graph.getNeighbors(inverse[0]);
+      engine.addNoun(noun[0]);
+      assert.deepEqual(graph.getNeighbors(noun[0]), nounRefA);
+      assert.deepEqual(graph.getNeighbors(inverse[0]), nounRefB);
     });
   });
 
@@ -76,47 +86,59 @@ describe('InferenceEngine', function() {
     var engine = new InferenceEngine();
 
     it('should not have noun because it is not yet added', function() {
-      assert.isFalse(engine.hasNoun(nounA));
-      assert.isFalse(engine.hasNoun(nounB));
+      assert.isFalse(engine.hasNoun(noun[0]));
+      assert.isFalse(engine.hasNoun(noun[1]));
     });
 
     it('should have nouns after adding them to the engine', function() {
-      engine.addNoun(nounA);
-      engine.addNoun(nounB);
-      assert.isTrue(engine.hasNoun(nounA));
-      assert.isTrue(engine.hasNoun(nounB));
+      engine.addNoun(noun[0]);
+      engine.addNoun(noun[1]);
+      assert.isTrue(engine.hasNoun(noun[0]));
+      assert.isTrue(engine.hasNoun(noun[1]));
     });
   });
 
 
   describe('.teachAllAre()', function() {
     var engine = new InferenceEngine();
-    engine.addNoun(nounA);
-    engine.addNoun(nounB);
+    engine.addNoun(noun[0]);
+    engine.addNoun(noun[1]);
 
-    it('should not yet have an edge from nounA to nounB', function() {
-      assert.isFalse(engine.hasDirectRelationship(nounA, nounB));
-      assert.isFalse(engine.hasDirectRelationship(nounB, nounA));
-      assert.isFalse(engine.hasDirectRelationship(inverseA, inverseB));
-      assert.isFalse(engine.hasDirectRelationship(inverseB, inverseA));
+    it('should not yet have an edge from noun[0] to noun[1]', function() {
+      assert.isFalse(engine.hasDirectRelationship(noun[0], noun[1]));
+      assert.isFalse(engine.hasDirectRelationship(noun[1], noun[0]));
+      assert.isFalse(engine.hasDirectRelationship(inverse[0], inverse[1]));
+      assert.isFalse(engine.hasDirectRelationship(inverse[1], inverse[0]));
     });
+
+    it('should now have a direct relationship from noun[0] to noun[1]', function() {
+      engine.teachAllAre(noun[0], noun[1]);
+      assert
+    });
+
   });
 
 
   describe('.hasDirectRelationship()', function() {
     var engine = new InferenceEngine();
-    var graph = engine.getGraph();
-    engine.addNoun(nounA);
-    engine.addNoun(nounB);
+    engine.addNoun(noun[0]);
+    engine.addNoun(noun[1]);
 
     it('should be true since nouns have a direct relationship to themselves', function() {
-      assert.isTrue(graph.hasDirectRelationship(nounA, nounA));
-      assert.isTrue(graph.hasDirectRelationship(nounB, nounB));
+      assert.isTrue(engine.hasDirectRelationship(noun[0], noun[0]));
+      assert.isTrue(engine.hasDirectRelationship(noun[1], noun[1]));
+      assert.isTrue(engine.hasDirectRelationship(inverse[0], inverse[0]));
+      assert.isTrue(engine.hasDirectRelationship(inverse[1], inverse[1]));
     });
 
-    it('should not have a direct relationship between nounA and nounB', function() {
-      assert.isFalse(graph.hasDirectRelationship(nounA, nounB));
-      assert.isFalse(graph.hasDirectRelationship(nounB, nounA));
+    it('should not have a direct relationship between noun[0] and noun[1]', function() {
+      assert.isFalse(engine.hasDirectRelationship(noun[0], noun[1]));
+      assert.isFalse(engine.hasDirectRelationship(noun[1], noun[0]));
+    });
+
+    it('should have a direct relationship between noun[0] and noun[1]', function() {
+      engine.teachAllAre(noun[0], noun[1]);
+      assert.isTrue(engine.hasDirectRelationship(noun[0], noun[1]));
     });
   });
 

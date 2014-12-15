@@ -48,10 +48,12 @@ InferenceEngine.prototype.hasNoun = function(noun) {
 };
 
 InferenceEngine.prototype.hasDirectRelationship = function(nounA, nounB) {
-  return (this.graph.hasEdge(nounA, nounB)
-          && this.graph.hasEdge(nounB, nounA));
+  return this.graph.hasEdge(nounA, nounB);
 };
 
+InferenceEngine.prototype.getRelationship = function(nounA, nounB, bool) {
+
+};
 
 /************************************
  * InferenceEngine Teaching Methods *
