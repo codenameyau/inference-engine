@@ -50,9 +50,10 @@ InferenceEngine.prototype.hasDirectRelationship = function(nounA, nounB) {
   return this.graph.hasEdge(nounA, nounB);
 };
 
-InferenceEngine.prototype.getRelationship = function(nounA, nounB, bool) {
-
+InferenceEngine.prototype.getRelationship = function(nounA, nounB) {
+  return this.graph.getWeight(nounA, nounB);
 };
+
 
 /************************************
  * InferenceEngine Teaching Methods *

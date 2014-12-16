@@ -103,6 +103,7 @@ describe('InferenceEngine', function() {
     var engine = new InferenceEngine();
     engine.addNoun(noun[0]);
     engine.addNoun(noun[1]);
+    engine.addNoun(noun[2]);
 
     it('should not yet have an edge from noun[0] to noun[1]', function() {
       assert.isFalse(engine.hasDirectRelationship(noun[0], noun[1]));
@@ -116,6 +117,15 @@ describe('InferenceEngine', function() {
       assert.isTrue(engine.hasDirectRelationship(noun[0], noun[1]));
     });
 
+    it('should have the correct weights assigned between noun relationships', function() {
+      assert.strictEqual(engine.getRelationship(noun[0], noun[1]), 1);
+    });
+
+    it('should add additional relationships with other nouns', function() {
+      engine.teachAllAre(noun[0], noun[2]);
+      assert.isTrue(engine.hasDirectRelationship(noun[0], noun[2]));
+      assert.strictEqual(engine.getRelationship(noun[0], noun[2]), 1);
+    });
   });
 
 
