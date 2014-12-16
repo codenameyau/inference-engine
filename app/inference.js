@@ -28,11 +28,11 @@ InferenceEngine.prototype.negate = function(definition) {
 };
 
 InferenceEngine.prototype.inverse = function(noun) {
-  // Use underscore to remove quotes from object key
-  return 'no_' + noun;
+  return this.replaceSpaces('no ' + noun);
 };
 
 InferenceEngine.prototype.addNoun = function(noun) {
+  noun = this.replaceSpaces(noun);
   var inverseNoun = this.inverse(noun);
   this.graph.addVertex(noun);
   this.graph.addVertex(inverseNoun);
@@ -100,6 +100,14 @@ InferenceEngine.prototype.queryAreSome = function() {
 
 InferenceEngine.prototype.queryAreSomeNot = function() {
 
+};
+
+
+/************************************
+ * InferenceEngine Internal Methods *
+ ************************************/
+InferenceEngine.prototype.replaceSpaces = function(noun) {
+  return noun.replace(/[\-\s]+/g, '_');
 };
 
 module.exports = InferenceEngine;
