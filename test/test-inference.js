@@ -113,7 +113,7 @@ describe('InferenceEngine', function() {
 
     it('should now have a direct relationship from noun[0] to noun[1]', function() {
       engine.teachAllAre(noun[0], noun[1]);
-      assert
+      assert.isTrue(engine.hasDirectRelationship(noun[0], noun[1]));
     });
 
   });
@@ -134,11 +134,6 @@ describe('InferenceEngine', function() {
     it('should not have a direct relationship between noun[0] and noun[1]', function() {
       assert.isFalse(engine.hasDirectRelationship(noun[0], noun[1]));
       assert.isFalse(engine.hasDirectRelationship(noun[1], noun[0]));
-    });
-
-    it('should have a direct relationship between noun[0] and noun[1]', function() {
-      engine.teachAllAre(noun[0], noun[1]);
-      assert.isTrue(engine.hasDirectRelationship(noun[0], noun[1]));
     });
   });
 

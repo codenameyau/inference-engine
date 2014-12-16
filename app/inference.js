@@ -43,8 +43,7 @@ InferenceEngine.prototype.addNoun = function(noun) {
 };
 
 InferenceEngine.prototype.hasNoun = function(noun) {
-  return (this.graph.hasVertex(noun) 
-          && this.graph.hasVertex(this.inverse(noun)));
+  return (this.graph.hasVertex(noun) && this.graph.hasVertex(this.inverse(noun)));
 };
 
 InferenceEngine.prototype.hasDirectRelationship = function(nounA, nounB) {
