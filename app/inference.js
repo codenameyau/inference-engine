@@ -2,6 +2,20 @@
  * InferenceEngine - inference.js
  * MIT License (c) 2014
  * codenameyau.github.io
+ *
+ * Description:
+ * InferenceEngine is capable of learning facts and making
+ * logical deductions based on facts that it already knows.
+ *
+ * Implementation:
+ * InferenceEngine is implemented as a weighted directed graph,
+ * where the vertices represent properties and the edges represent
+ * relationships between two properties. Each property has an
+ * relationship with its inverse property with a weight of -1.
+ *
+ * The weights indicate whether a relationship is always true (weight = 1),
+ * sometimes true (weight = 0), or never true (weight = -1).
+ * Weights function more as labels rather than costs.
  */
 'use strict';
 
@@ -13,6 +27,11 @@ var Graph = require('directed-graph');
  *******************************/
 function InferenceEngine() {
   this.graph = new Graph();
+  this.truth = {
+    always: 1,
+    sometimes: 0,
+    never: -1
+  };
 }
 
 
