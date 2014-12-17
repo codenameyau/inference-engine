@@ -260,4 +260,52 @@ describe('InferenceEngine', function() {
     });
   });
 
+
+  describe('Scenario 1', function() {
+    var engine = new InferenceEngine();
+    engine.addNoun('dogs');
+    engine.addNoun('mammals');
+    engine.addNoun('hairy animals');
+    engine.addNoun('animals');
+    engine.addNoun('cats');
+    engine.addNoun('brown things');
+    engine.teachAllAre('dogs', 'mammals');
+    engine.teachAllAre('hairy animals', 'animals');
+    engine.teachAllAre('mammals', 'hairy animals');
+    engine.teachAllAre('cats', 'mammals');
+    engine.teachSomeAre('animals', 'brown things');
+
+    it('should return true for the following provable queries', function() {
+      assert.isTrue(engine.queryAreAll('dogs', 'mammals'));
+      assert.isTrue(engine.queryAreAll('dogs', 'animals'));
+      assert.isTrue(engine.queryAreAll('dogs', 'hairy animals'));
+      assert.isTrue(engine.queryAreAll('cats', 'mammals'));
+      assert.isTrue(engine.queryAreAll('cats', 'animals'));
+      assert.isTrue(engine.queryAreAll('cats', 'hairy animals'));
+      assert.isTrue(engine.queryAreAll('hairy animals', 'animals'));
+    });
+
+    it('should return false for the following provable queries', function() {
+      assert.isFalse(engine.queryAreAll('dogs', 'cats'));
+      assert.isFalse(engine.queryAreAll('mammals', 'cats'));
+      assert.isFalse(engine.queryAreAll('mammals', 'dogs'));
+      assert.isFalse(engine.queryAreAll('animals', 'dogs'));
+      assert.isFalse(engine.queryAreAll('animals', 'mammals'));
+      assert.isFalse(engine.queryAreAll('hairy animals', 'dogs'));
+      assert.isFalse(engine.queryAreAll('hairy animals', 'mammals'));
+    });
+
+    it('should return true for the following possibly true queries', function() {
+      assert.isTrue(engine.queryAreSome('cats', 'brown things'));
+      assert.isTrue(engine.queryAreSome('brown things', 'cats'));
+      assert.isTrue(engine.queryAreSome('animals', 'cats'));
+      assert.isTrue(engine.queryAreSome('animals', 'mammals'));
+    });
+
+    it('should return false for the following contradictory queries', function() {
+      assert.isFalse(engine.queryAreSome('dogs', 'cats'));
+      assert.isFalse(engine.queryAreSome('cats', 'dogs'));
+    });
+  });
+
 });

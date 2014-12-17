@@ -72,6 +72,7 @@ InferenceEngine.prototype.assertStatement = function(nounA, nounB, value) {
  * InferenceEngine Teaching Methods *
  ************************************/
 InferenceEngine.prototype.teachEngine = function(nounA, nounB, truth) {
+  // [TODO]: check for contradictions
   nounA = this.replaceSpaces(nounA);
   nounB = this.replaceSpaces(nounB);
   var inverseA = this.inverse(nounA);
