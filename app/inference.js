@@ -63,28 +63,31 @@ InferenceEngine.prototype.getRelationship = function(nounA, nounB) {
   return this.graph.getWeight(nounA, nounB);
 };
 
-InferenceEngine.prototype.assertStatement = function(nounA, nounB, bool) {
-  return (this.getRelationship(nounA, nounB) === bool);
+InferenceEngine.prototype.assertStatement = function(nounA, nounB, value) {
+  return this.getRelationship(nounA, nounB) === value;
 };
 
 
 /************************************
  * InferenceEngine Teaching Methods *
  ************************************/
-InferenceEngine.prototype.teachAllAre = function(nounA, nounB) {
-  // [TODO]: check for contradictions
+InferenceEngine.prototype.teachEngine = function(nounA, nounB, truth) {
   var inverseA = this.inverse(nounA);
   var inverseB = this.inverse(nounB);
-  this.graph.addEdge(nounA, nounB, 1);
-  this.graph.addEdge(inverseB, inverseA, 1);
-  this.graph.addEdge(inverseA, nounB, 0);
-  this.graph.addEdge(inverseB, nounA, 0);
-  this.graph.addEdge(nounA, inverseB, 0);
-  this.graph.addEdge(nounB, inverseA, 0);
+  this.graph.addEdge(nounA, nounB, truth[0]);
+  this.graph.addEdge(inverseB, inverseA, truth[1]);
+  this.graph.addEdge(inverseA, nounB, truth[2]);
+  this.graph.addEdge(inverseB, nounA, truth[3]);
+  this.graph.addEdge(nounA, inverseB, truth[4]);
+  this.graph.addEdge(nounB, inverseA, truth[5]);
 };
 
-InferenceEngine.prototype.teachNoAre = function() {
+InferenceEngine.prototype.teachAllAre = function(nounA, nounB) {
+  this.teachEngine(nounA, nounB, [1, 1, 0, 0, 0, 0]);
+};
 
+InferenceEngine.prototype.teachNoAre = function(nounA, nounB) {
+  this.teachEngine(nounA, nounB, [0, 0, 0, 0, 1, 1]);
 };
 
 InferenceEngine.prototype.teachSomeAre = function() {
