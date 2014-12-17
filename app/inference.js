@@ -90,12 +90,8 @@ InferenceEngine.prototype.teachNoAre = function(nounA, nounB) {
   this.teachEngine(nounA, nounB, [0, 0, 0, 0, 1, 1]);
 };
 
-InferenceEngine.prototype.teachSomeAre = function() {
-
-};
-
-InferenceEngine.prototype.teachSomeAreNot = function() {
-
+InferenceEngine.prototype.teachSomeAre = function(nounA, nounB) {
+  this.teachEngine(nounA, nounB, [0, 0, 0, 0, 0, 0]);
 };
 
 
@@ -111,10 +107,6 @@ InferenceEngine.prototype.queryAreNo = function() {
 };
 
 InferenceEngine.prototype.queryAreSome = function() {
-
-};
-
-InferenceEngine.prototype.queryAreSomeNot = function() {
 
 };
 
