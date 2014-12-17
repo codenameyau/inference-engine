@@ -115,6 +115,39 @@ describe('InferenceEngine', function() {
   });
 
 
+  describe('.hasDirectRelationship()', function() {
+    var engine = new InferenceEngine();
+    engine.addNoun(noun[0]);
+    engine.addNoun(noun[1]);
+
+    it('should be true since nouns have a direct relationship to themselves', function() {
+      assert.isTrue(engine.hasDirectRelationship(noun[0], noun[0]));
+      assert.isTrue(engine.hasDirectRelationship(noun[1], noun[1]));
+      assert.isTrue(engine.hasDirectRelationship(inverse[0], inverse[0]));
+      assert.isTrue(engine.hasDirectRelationship(inverse[1], inverse[1]));
+    });
+
+    it('should not have a direct relationship between noun[0] and noun[1]', function() {
+      assert.isFalse(engine.hasDirectRelationship(noun[0], noun[1]));
+      assert.isFalse(engine.hasDirectRelationship(noun[1], noun[0]));
+    });
+  });
+
+
+  describe('.assertStatement()', function() {
+    var engine = new InferenceEngine();
+    engine.addNoun(noun[0]);
+    engine.addNoun(noun[1]);
+
+    it('should return true assertion statements for noun', function() {
+      assert.isTrue(engine.assertStatement(noun[0], noun[0], 1));
+      assert.isTrue(engine.assertStatement(inverse[0], inverse[0], 1));
+      assert.isTrue(engine.assertStatement(noun[0], inverse[0], 0));
+      assert.isTrue(engine.assertStatement(inverse[0], noun[0], 0));
+    });
+  });
+
+
   describe('.teachAllAre()', function() {
     var engine = new InferenceEngine();
     engine.addNoun(noun[0]);
@@ -135,6 +168,8 @@ describe('InferenceEngine', function() {
 
     it('should have the correct weights assigned between noun relationships', function() {
       assert.strictEqual(engine.getRelationship(noun[0], noun[1]), 1);
+      assert.strictEqual(engine.getRelationship(inverse[1], inverse[0]), 1);
+      assert.strictEqual(engine.getRelationship(inverse[1], noun[0]), 0);
       assert.strictEqual(engine.getRelationship(inverse[0], noun[1]), 0);
       assert.strictEqual(engine.getRelationship(noun[1], inverse[0]), 0);
       assert.strictEqual(engine.getRelationship(noun[0], inverse[1]), 0);
@@ -148,21 +183,23 @@ describe('InferenceEngine', function() {
   });
 
 
-  describe('.hasDirectRelationship()', function() {
+  describe('.teachNoAre()', function() {
     var engine = new InferenceEngine();
     engine.addNoun(noun[0]);
-    engine.addNoun(noun[1]);
+    engine.addNoun(noun[3]);
 
-    it('should be true since nouns have a direct relationship to themselves', function() {
-      assert.isTrue(engine.hasDirectRelationship(noun[0], noun[0]));
-      assert.isTrue(engine.hasDirectRelationship(noun[1], noun[1]));
-      assert.isTrue(engine.hasDirectRelationship(inverse[0], inverse[0]));
-      assert.isTrue(engine.hasDirectRelationship(inverse[1], inverse[1]));
+    it('should have a direct relationship from noun[0] to noun[3]', function() {
+      engine.teachNoAre(noun[0], noun[3]);
+      assert.isTrue(engine.hasDirectRelationship(noun[0], noun[3]));
     });
 
-    it('should not have a direct relationship between noun[0] and noun[1]', function() {
-      assert.isFalse(engine.hasDirectRelationship(noun[0], noun[1]));
-      assert.isFalse(engine.hasDirectRelationship(noun[1], noun[0]));
+    it('should have the correct weights between relationship', function() {
+      assert.strictEqual(engine.getRelationship(noun[0], noun[3]), 0);
+      assert.strictEqual(engine.getRelationship(inverse[3], inverse[0]), 0);
+      assert.strictEqual(engine.getRelationship(inverse[3], noun[0]), 0);
+      assert.strictEqual(engine.getRelationship(inverse[0], noun[3]), 0);
+      assert.strictEqual(engine.getRelationship(noun[3], inverse[0]), 1);
+      assert.strictEqual(engine.getRelationship(noun[0], inverse[3]), 1);
     });
   });
 
