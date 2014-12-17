@@ -226,7 +226,7 @@ describe('InferenceEngine', function() {
   });
 
 
-  describe('Scenario 1', function() {
+  describe('.queryEngine()', function() {
     var engine = new InferenceEngine();
     engine.addNoun(noun[0]); // 'dogs'
     engine.addNoun(noun[1]); // 'mammals'
@@ -234,12 +234,24 @@ describe('InferenceEngine', function() {
     engine.addNoun(noun[3]); // 'cats'
     engine.addNoun(noun[4]); // 'brown things'
 
-    it('should define the example relationships between the nouns', function() {
-      engine.teachAllAre(noun[0], noun[1]);
-      engine.teachAllAre(noun[1], noun[2]);
-      engine.teachNoAre(noun[0], noun[3]);
-      engine.teachSomeAre(noun[1], noun[4]);
+    // Teach engine and build relationships
+    engine.teachAllAre(noun[0], noun[1]);
+    engine.teachAllAre(noun[1], noun[2]);
+    engine.teachNoAre(noun[0], noun[3]);
+    engine.teachSomeAre(noun[1], noun[4]);
+
+    // it('should return true for the relationship between a noun and itself', function() {
+    //   for (var i=0, l=noun.length; i<l; i++) {
+    //     assert.isTrue(engine.queryEngine(noun[i], noun[i], 1));
+    //     assert.isTrue(engine.queryEngine(inverse[i], inverse[i], 1));
+    //   }
+    // });
+
+    it('should return true for the relationship between noun[0] and noun[1]', function() {
+      assert.isTrue(engine.queryEngine(noun[0], noun[2], 1));
     });
+
+
   });
 
 });
