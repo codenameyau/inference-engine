@@ -30,11 +30,11 @@ describe('InferenceEngine', function() {
 
   describe('.negate()', function() {
     it('should return false if the argument is true', function() {
-      assert.isFalse(globalEngine.negate(true));
+      assert.strictEqual(globalEngine.negate(1), 0);
     });
 
     it('should return true if the argument is false', function() {
-      assert.isTrue(globalEngine.negate(false));
+      assert.strictEqual(globalEngine.negate(0), 1);
     });
   });
 

@@ -33,7 +33,7 @@ InferenceEngine.prototype.getGraph = function() {
 };
 
 InferenceEngine.prototype.negate = function(definition) {
-  return (definition === true) ? false : true;
+  return (definition === 1) ? 0 : 1;
 };
 
 InferenceEngine.prototype.inverse = function(noun) {
@@ -99,6 +99,10 @@ InferenceEngine.prototype.teachSomeAre = function(nounA, nounB) {
  * InferenceEngine Query Methods *
  *********************************/
 InferenceEngine.prototype.queryEngine = function(nounA, nounB, truth) {
+  // Replace spaces and lower
+  nounA = this.replaceSpaces(nounA);
+  nounB = this.replaceSpaces(nounB);
+
   // Perform BFS
   var queue = [nounA];
   var visited = {nounA: 1};
@@ -117,14 +121,14 @@ InferenceEngine.prototype.queryEngine = function(nounA, nounB, truth) {
 };
 
 InferenceEngine.prototype.queryAreAll = function(nounA, nounB) {
-
+  return this.queryEngine(nounA, nounB, 1);
 };
 
-InferenceEngine.prototype.queryAreNo = function() {
-
+InferenceEngine.prototype.queryAreNo = function(nounA, nounB) {
+  return this.queryEngine(nounA, nounB, 0);
 };
 
-InferenceEngine.prototype.queryAreSome = function() {
+InferenceEngine.prototype.queryAreSome = function(nounA, nounB) {
 
 };
 
@@ -133,7 +137,7 @@ InferenceEngine.prototype.queryAreSome = function() {
  * InferenceEngine Internal Methods *
  ************************************/
 InferenceEngine.prototype.replaceSpaces = function(noun) {
-  return noun.replace(/[\-\s]+/g, '_');
+  return noun.replace(/[\-\s]+/g, '_').toLowerCase();
 };
 
 module.exports = InferenceEngine;
