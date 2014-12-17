@@ -72,6 +72,8 @@ InferenceEngine.prototype.assertStatement = function(nounA, nounB, value) {
  * InferenceEngine Teaching Methods *
  ************************************/
 InferenceEngine.prototype.teachEngine = function(nounA, nounB, truth) {
+  nounA = this.replaceSpaces(nounA);
+  nounB = this.replaceSpaces(nounB);
   var inverseA = this.inverse(nounA);
   var inverseB = this.inverse(nounB);
   this.graph.addEdge(nounA, nounB, truth[0]);
@@ -98,7 +100,7 @@ InferenceEngine.prototype.teachSomeAre = function(nounA, nounB) {
 /*********************************
  * InferenceEngine Query Methods *
  *********************************/
-InferenceEngine.prototype.queryEngine = function(nounA, nounB, truth) {
+InferenceEngine.prototype.queryEngine = function(nounA, nounB, truth, provable) {
   // Replace spaces and lower
   nounA = this.replaceSpaces(nounA);
   nounB = this.replaceSpaces(nounB);
@@ -108,10 +110,22 @@ InferenceEngine.prototype.queryEngine = function(nounA, nounB, truth) {
   var visited = {nounA: 1};
   while (queue.length > 0) {
     var current = queue.shift();
+
+    // Target is found
     if (current === nounB) { return true; }
+
+    // Search through neighbors
     for (var node in this.graph.getNeighbors(current)) {
-      if (!visited.hasOwnProperty(node) &&
-        (this.graph.getWeight(current, node) === truth)) {
+      var deducedRelationship = !visited.hasOwnProperty(node);
+
+      // Provable (always true)
+      if (provable) {
+        deducedRelationship = deducedRelationship &&
+        (this.graph.getWeight(current, node) === truth);
+      }
+
+      // Search neighbor if relationship is deduced
+      if (deducedRelationship) {
         visited[node] = 1;
         queue.push(node);
       }
@@ -121,15 +135,15 @@ InferenceEngine.prototype.queryEngine = function(nounA, nounB, truth) {
 };
 
 InferenceEngine.prototype.queryAreAll = function(nounA, nounB) {
-  return this.queryEngine(nounA, nounB, 1);
+  return this.queryEngine(nounA, nounB, 1, true);
 };
 
 InferenceEngine.prototype.queryAreNo = function(nounA, nounB) {
-  return this.queryEngine(nounA, nounB, 0);
+  return this.queryEngine(nounA, nounB, 0, true);
 };
 
 InferenceEngine.prototype.queryAreSome = function(nounA, nounB) {
-
+  return this.queryEngine(nounA, nounB, 0, false);
 };
 
 

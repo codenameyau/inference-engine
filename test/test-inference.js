@@ -248,15 +248,15 @@ describe('InferenceEngine', function() {
     });
 
     it('should return true for the relationship from noun[0] through noun[1]', function() {
-      assert.isTrue(engine.queryEngine(noun[0], noun[1], 1));
-      assert.isTrue(engine.queryEngine(noun[1], noun[2], 1));
-      assert.isTrue(engine.queryEngine(noun[0], noun[2], 1));
+      assert.isTrue(engine.queryEngine(noun[0], noun[1], 1, true));
+      assert.isTrue(engine.queryEngine(noun[1], noun[2], 1, true));
+      assert.isTrue(engine.queryEngine(noun[0], noun[2], 1, true));
     });
 
     it('should return false for the following relationships', function() {
-      assert.isFalse(engine.queryEngine(noun[0], noun[3], 1));
-      assert.isFalse(engine.queryEngine(noun[3], noun[0], 1));
-      assert.isFalse(engine.queryEngine(noun[0], noun[4], 1));
+      assert.isFalse(engine.queryEngine(noun[0], noun[3], 1, true));
+      assert.isFalse(engine.queryEngine(noun[3], noun[0], 1, true));
+      assert.isFalse(engine.queryEngine(noun[0], noun[4], 1, true));
     });
   });
 
