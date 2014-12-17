@@ -18,6 +18,7 @@ describe('InferenceEngine', function() {
   noun[1] = 'mammals';
   noun[2] = 'hairy animals';
   noun[3] = 'cats';
+  noun[4] = 'brown things';
 
   // Get inverse of nouns
   var inverse = [];
@@ -200,6 +201,44 @@ describe('InferenceEngine', function() {
       assert.strictEqual(engine.getRelationship(inverse[0], noun[3]), 0);
       assert.strictEqual(engine.getRelationship(noun[3], inverse[0]), 1);
       assert.strictEqual(engine.getRelationship(noun[0], inverse[3]), 1);
+    });
+  });
+
+
+  describe('.teachSomeAre()', function() {
+    var engine = new InferenceEngine();
+    engine.addNoun(noun[0]);
+    engine.addNoun(noun[4]);
+
+    it('should have a direct relationship from noun[0] to noun[4]', function() {
+      engine.teachSomeAre(noun[0], noun[4]);
+      assert.isTrue(engine.hasDirectRelationship(noun[0], noun[4]));
+    });
+
+    it('should have the correct weights between relationship', function() {
+      assert.strictEqual(engine.getRelationship(noun[0], noun[4]), 0);
+      assert.strictEqual(engine.getRelationship(inverse[4], inverse[0]), 0);
+      assert.strictEqual(engine.getRelationship(inverse[4], noun[0]), 0);
+      assert.strictEqual(engine.getRelationship(inverse[0], noun[4]), 0);
+      assert.strictEqual(engine.getRelationship(noun[4], inverse[0]), 0);
+      assert.strictEqual(engine.getRelationship(noun[0], inverse[4]), 0);
+    });
+  });
+
+
+  describe('Scenario 1', function() {
+    var engine = new InferenceEngine();
+    engine.addNoun(noun[0]); // 'dogs'
+    engine.addNoun(noun[1]); // 'mammals'
+    engine.addNoun(noun[2]); // 'hairy animals'
+    engine.addNoun(noun[3]); // 'cats'
+    engine.addNoun(noun[4]); // 'brown things'
+
+    it('should define the example relationships between the nouns', function() {
+      engine.teachAllAre(noun[0], noun[1]);
+      engine.teachAllAre(noun[1], noun[2]);
+      engine.teachNoAre(noun[0], noun[3]);
+      engine.teachSomeAre(noun[1], noun[4]);
     });
   });
 
