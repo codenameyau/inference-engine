@@ -10,12 +10,7 @@
  * Implementation:
  * InferenceEngine is implemented as a weighted directed graph,
  * where the vertices represent properties and the edges represent
- * relationships between two properties. Each property has an
- * relationship with its inverse property with a weight of -1.
- *
- * The weights indicate whether a relationship is always true (weight = 1),
- * sometimes true (weight = 0), or never true (weight = -1).
- * Weights function more as labels rather than costs.
+ * relationships between two properties.
  */
 'use strict';
 
@@ -27,11 +22,6 @@ var Graph = require('directed-graph');
  *******************************/
 function InferenceEngine() {
   this.graph = new Graph();
-  this.truth = {
-    always: 1,
-    sometimes: 0,
-    never: -1
-  };
 }
 
 
@@ -71,6 +61,10 @@ InferenceEngine.prototype.hasDirectRelationship = function(nounA, nounB) {
 
 InferenceEngine.prototype.getRelationship = function(nounA, nounB) {
   return this.graph.getWeight(nounA, nounB);
+};
+
+InferenceEngine.prototype.assertStatement = function(nounA, nounB, bool) {
+  return (this.getRelationship(nounA, nounB) === bool);
 };
 
 
