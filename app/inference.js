@@ -111,7 +111,6 @@ InferenceEngine.prototype.queryEngine = function(nounA, nounB, truth, provable) 
   var visited = {nounA: 1};
   while (queue.length > 0) {
     var current = queue.shift();
-
     // Target is found
     if (current === nounB) { return true; }
 
@@ -140,11 +139,11 @@ InferenceEngine.prototype.queryAreAll = function(nounA, nounB) {
 };
 
 InferenceEngine.prototype.queryAreNo = function(nounA, nounB) {
-  return this.queryEngine(nounA, nounB, 0, true);
+  return this.queryEngine(this.inverse(nounA), nounB, 0, true);
 };
 
 InferenceEngine.prototype.queryAreSome = function(nounA, nounB) {
-  return this.queryEngine(nounA, nounB, 0, false);
+  return this.queryEngine(nounA, this.inverse(nounB), 0, false);
 };
 
 

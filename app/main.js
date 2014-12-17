@@ -11,23 +11,16 @@ var InferenceEngine = require('./inference');
 
   var engine = new InferenceEngine();
   engine.addNoun('dogs');
-  engine.addNoun('mammals');
-  engine.addNoun('hairy animals');
-  engine.addNoun('animals');
   engine.addNoun('cats');
-  engine.addNoun('brown things');
+  engine.addNoun('mammals');
+  engine.addNoun('octopuses');
   engine.teachAllAre('dogs', 'mammals');
-  engine.teachAllAre('hairy animals', 'animals');
-  engine.teachAllAre('mammals', 'hairy animals');
-  engine.teachAllAre('cats', 'mammals');
-  engine.teachSomeAre('animals', 'brown things');
+  engine.teachNoAre('dogs', 'cats');
+  engine.teachNoAre('octopuses', 'mammals');
 
-  console.log(engine.queryAreAll('dogs', 'mammals'));
-  console.log(engine.queryAreAll('dogs', 'cats'));
-  console.log(engine.queryAreAll('dogs', 'animals'));
-  console.log(engine.queryAreAll('cats', 'animals'));
-  console.log(engine.queryAreAll('cats', 'dogs'));
-  console.log(engine.queryAreSome('cats', 'brown things'));
-  console.log(engine.queryAreSome('brown things', 'cats'));
+  // console.log(engine.graph);
+  // console.log(engine.queryAreNo('octopuses', 'dogs'));
+  // console.log(engine.queryAreSome('dogs', 'cats'));
+  console.log(engine.queryAreNo('dogs', 'mammals'));
 
 })();
