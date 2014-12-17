@@ -22,6 +22,7 @@ describe('InferenceEngine', function() {
   // Get inverse of nouns
   var inverse = [];
   for (var i=0, l=noun.length; i<l; i++) {
+    noun[i] = globalEngine.replaceSpaces(noun[i]);
     inverse.push(globalEngine.inverse(noun[i]));
   }
 
@@ -134,13 +135,15 @@ describe('InferenceEngine', function() {
 
     it('should have the correct weights assigned between noun relationships', function() {
       assert.strictEqual(engine.getRelationship(noun[0], noun[1]), 1);
+      assert.strictEqual(engine.getRelationship(inverse[0], noun[1]), 0);
+      assert.strictEqual(engine.getRelationship(noun[1], inverse[0]), 0);
+      assert.strictEqual(engine.getRelationship(noun[0], inverse[1]), 0);
     });
 
     it('should add additional relationships with other nouns', function() {
-      console.log(engine.graph);
-      // engine.teachAllAre(noun[0], noun[2]);
-      // assert.isTrue(engine.hasDirectRelationship(noun[0], noun[2]));
-      // assert.strictEqual(engine.getRelationship(noun[0], noun[2]), 1);
+      engine.teachAllAre(noun[0], noun[2]);
+      assert.isTrue(engine.hasDirectRelationship(noun[0], noun[2]));
+      assert.strictEqual(engine.getRelationship(noun[0], noun[2]), 1);
     });
   });
 
