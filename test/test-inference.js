@@ -240,18 +240,24 @@ describe('InferenceEngine', function() {
     engine.teachNoAre(noun[0], noun[3]);
     engine.teachSomeAre(noun[1], noun[4]);
 
-    // it('should return true for the relationship between a noun and itself', function() {
-    //   for (var i=0, l=noun.length; i<l; i++) {
-    //     assert.isTrue(engine.queryEngine(noun[i], noun[i], 1));
-    //     assert.isTrue(engine.queryEngine(inverse[i], inverse[i], 1));
-    //   }
-    // });
+    it('should return true for the relationship between a noun and itself', function() {
+      for (var i=0, l=noun.length; i<l; i++) {
+        assert.isTrue(engine.queryEngine(noun[i], noun[i], 1));
+        assert.isTrue(engine.queryEngine(inverse[i], inverse[i], 1));
+      }
+    });
 
-    it('should return true for the relationship between noun[0] and noun[1]', function() {
+    it('should return true for the relationship from noun[0] through noun[1]', function() {
+      assert.isTrue(engine.queryEngine(noun[0], noun[1], 1));
+      assert.isTrue(engine.queryEngine(noun[1], noun[2], 1));
       assert.isTrue(engine.queryEngine(noun[0], noun[2], 1));
     });
 
-
+    it('should return false for the following relationships', function() {
+      assert.isFalse(engine.queryEngine(noun[0], noun[3], 1));
+      assert.isFalse(engine.queryEngine(noun[3], noun[0], 1));
+      assert.isFalse(engine.queryEngine(noun[0], noun[4], 1));
+    });
   });
 
 });

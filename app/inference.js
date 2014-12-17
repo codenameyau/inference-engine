@@ -100,15 +100,14 @@ InferenceEngine.prototype.teachSomeAre = function(nounA, nounB) {
  *********************************/
 InferenceEngine.prototype.queryEngine = function(nounA, nounB, truth) {
   // Perform BFS
-  console.log(this.graph);
   var queue = [nounA];
   var visited = {nounA: 1};
   while (queue.length > 0) {
     var current = queue.shift();
     if (current === nounB) { return true; }
-    for (var node in this.graph[current]) {
-      var edgeWeight = this.graph.getWeight(current, node);
-      if (!visited.hasOwnProperty(node) && (edgeWeight === truth)) {
+    for (var node in this.graph.getNeighbors(current)) {
+      if (!visited.hasOwnProperty(node) &&
+        (this.graph.getWeight(current, node) === truth)) {
         visited[node] = 1;
         queue.push(node);
       }
