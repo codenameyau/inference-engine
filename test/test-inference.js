@@ -205,27 +205,6 @@ describe('InferenceEngine', function() {
   });
 
 
-  describe('.teachSomeAre()', function() {
-    var engine = new InferenceEngine();
-    engine.addNoun(noun[0]);
-    engine.addNoun(noun[4]);
-
-    it('should have a direct relationship from noun[0] to noun[4]', function() {
-      engine.teachSomeAre(noun[0], noun[4]);
-      assert.isTrue(engine.hasDirectRelationship(noun[0], noun[4]));
-    });
-
-    it('should have the correct weights between relationship', function() {
-      assert.strictEqual(engine.getRelationship(noun[0], noun[4]), 0);
-      assert.strictEqual(engine.getRelationship(inverse[4], inverse[0]), 0);
-      assert.strictEqual(engine.getRelationship(inverse[4], noun[0]), 0);
-      assert.strictEqual(engine.getRelationship(inverse[0], noun[4]), 0);
-      assert.strictEqual(engine.getRelationship(noun[4], inverse[0]), 0);
-      assert.strictEqual(engine.getRelationship(noun[0], inverse[4]), 0);
-    });
-  });
-
-
   describe('.queryEngine()', function() {
     var engine = new InferenceEngine();
     engine.addNoun(noun[0]); // 'dogs'
@@ -238,7 +217,6 @@ describe('InferenceEngine', function() {
     engine.teachAllAre(noun[0], noun[1]);
     engine.teachAllAre(noun[1], noun[2]);
     engine.teachNoAre(noun[0], noun[3]);
-    engine.teachSomeAre(noun[1], noun[4]);
 
     it('should return true for the relationship between a noun and itself', function() {
       for (var i=0, l=noun.length; i<l; i++) {
@@ -267,7 +245,6 @@ describe('InferenceEngine', function() {
     engine.addNoun('cats');
     engine.addNoun('mammals');
     engine.addNoun('animals');
-    engine.addNoun('brown things');
     engine.addNoun('octopuses');
 
     // Teach the engine
@@ -277,7 +254,6 @@ describe('InferenceEngine', function() {
     engine.teachAllAre('octopuses', 'animals');
     engine.teachNoAre('cats', 'dogs');
     engine.teachNoAre('octopuses', 'mammals');
-    engine.teachSomeAre('animals', 'brown things');
 
     it('should return true for the following provable ALL queries', function() {
       assert.isTrue(engine.queryAreAll('dogs', 'mammals'));
@@ -310,18 +286,6 @@ describe('InferenceEngine', function() {
       assert.isFalse(engine.queryAreNo('animals', 'dogs'));
       assert.isFalse(engine.queryAreNo('animals', 'octopuses'));
     });
-
-    // it('should return true for the following SOME queries', function() {
-    //   assert.isTrue(engine.queryAreSome('cats', 'brown things'));
-    //   assert.isTrue(engine.queryAreSome('brown things', 'cats'));
-    //   assert.isTrue(engine.queryAreSome('animals', 'cats'));
-    //   assert.isTrue(engine.queryAreSome('animals', 'mammals'));
-    // });
-
-    // it('should return false for the following SOME queries', function() {
-    //   assert.isFalse(engine.queryAreSome('dogs', 'cats'));
-    //   assert.isFalse(engine.queryAreSome('cats', 'dogs'));
-    // });
   });
 
 });

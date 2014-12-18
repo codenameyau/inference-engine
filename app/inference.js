@@ -97,15 +97,11 @@ InferenceEngine.prototype.teachNoAre = function(nounA, nounB) {
   this.teachEngine(nounA, nounB, [0, 0, 0, 0, 1, 1]);
 };
 
-InferenceEngine.prototype.teachSomeAre = function(nounA, nounB) {
-  this.teachEngine(nounA, nounB, [0, 0, 0, 0, 0, 0]);
-};
-
 
 /*********************************
  * InferenceEngine Query Methods *
  *********************************/
-InferenceEngine.prototype.queryEngine = function(nounA, nounB, truth, provable) {
+InferenceEngine.prototype.queryEngine = function(nounA, nounB, truth) {
   // Replace spaces and lower
   nounA = this.replaceSpaces(nounA);
   nounB = this.replaceSpaces(nounB);
@@ -117,38 +113,26 @@ InferenceEngine.prototype.queryEngine = function(nounA, nounB, truth, provable) 
     var current = queue.shift();
 
     // Target is found
-    if (current === nounB) { return true; }
+    if (current === nounB) { return this.weightToBoolean(truth); }
 
     // Search through neighbors
     for (var node in this.graph.getNeighbors(current)) {
-      var deducedRelationship = !visited.hasOwnProperty(node);
-
-      // Provable (always true)
-      if (provable) {
-        deducedRelationship = deducedRelationship &&
-        (this.graph.getWeight(current, node) === truth);
-      }
-
-      // Search neighbor if relationship is deduced
-      if (deducedRelationship) {
+      if (!visited.hasOwnProperty(node) &&
+        (this.graph.getWeight(current, node) === truth)) {
         visited[node] = 1;
         queue.push(node);
       }
     }
   }
-  return false;
+  return this.weightToBoolean(this.negate(truth));
 };
 
 InferenceEngine.prototype.queryAreAll = function(nounA, nounB) {
-  return this.queryEngine(nounA, nounB, 1, true);
+  return this.queryEngine(nounA, nounB, 1);
 };
 
 InferenceEngine.prototype.queryAreNo = function(nounA, nounB) {
-  return this.queryEngine(nounA, this.inverse(nounB), 1, true);
-};
-
-InferenceEngine.prototype.queryAreSome = function(nounA, nounB) {
-  return this.queryEngine(nounA, this.inverse(nounB), 0, false);
+  return this.queryEngine(nounA, this.inverse(nounB), 1);
 };
 
 
