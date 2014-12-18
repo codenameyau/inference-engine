@@ -2,6 +2,12 @@
  * InferenceEngine - inference.js
  * MIT License (c) 2014
  * codenameyau.github.io
+ *
+ * Tasks:
+ * - check for contradictions when teaching
+ * - update tab completion after teaching
+ * - teach "some NOUNs are NOUNs"
+ * - query "are some NOUNs NOUNs?"
  */
 'use strict';
 
@@ -45,9 +51,8 @@ var InferenceEngine = require('./inference');
   var matchHelp = /^help$/i;
   var matchAllAre = /^all ([a-z\s]+) are ([a-z\s]+)\.?$/i;
   var matchNoAre = /^no ([a-z\s]+) are ([a-z\s]+)\.?$/i;
-  var matchAreAll = /^are all ([a-z\s]+) ([a-z\s]+)\.?$/i;
-  var matchAreNo = /^are no ([a-z\s]+) ([a-z\s]+)\.?$/i;
-
+  var matchAreAll = /^are all ([a-z\s]+) ([a-z\s]+)\??$/i;
+  var matchAreNo = /^are no ([a-z\s]+) ([a-z\s]+)\??$/i;
   var extractNouns = function(string, regex) {
       return regex.exec(string);
   };
@@ -71,7 +76,7 @@ var InferenceEngine = require('./inference');
   // Define prompt cases
   rl.on('line', function(line) {
     line = line.trim().toLowerCase();
-    var nouns;
+    var nouns, result;
 
     switch (true) {
 
@@ -82,19 +87,25 @@ var InferenceEngine = require('./inference');
       case matchAllAre.test(line):
         nouns = extractNouns(line, matchAllAre);
         engine.teachAllAre(nouns[1], nouns[2]);
-        console.log(engine.graph);
+        console.log('Okay.');
         break;
 
       case matchNoAre.test(line):
-        console.log('TEACH NO');
+        nouns = extractNouns(line, matchNoAre);
+        engine.teachNoAre(nouns[1], nouns[2]);
+        console.log('Okay.');
         break;
 
       case matchAreAll.test(line):
-        console.log('QUERY ARE ALL');
+        nouns = extractNouns(line, matchAreAll);
+        result = engine.queryAreAll(nouns[1], nouns[2]);
+        console.log(result);
         break;
 
       case matchAreNo.test(line):
-        console.log('QUERY ARE NO');
+        nouns = extractNouns(line, matchAreNo);
+        result = engine.queryAreNo(nouns[1], nouns[2]);
+        console.log(result);
         break;
 
       default:
