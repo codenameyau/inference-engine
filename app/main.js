@@ -10,10 +10,9 @@ var InferenceEngine = require('./inference');
 
 (function() {
 
-  // Create inference engine
-  var engine = new InferenceEngine();
-
-  // Define help console message
+  /**************************
+   * Interface Help Message *
+   **************************/
   var displayHelpMessage = function() {
     console.log('\nYou can teach the engine with the following commands:\n');
     console.log('  all NOUN are NOUN');
@@ -27,7 +26,10 @@ var InferenceEngine = require('./inference');
     console.log('   > are all dogs animals?');
   };
 
-  // Define tab-completion
+
+  /******************************
+   * Interface Tab Completetion *
+   ******************************/
   var tabCompletion = function(line) {
     var completions = 'all no are'.split(' ');
     var hits = completions.filter(function(c) {
@@ -35,7 +37,11 @@ var InferenceEngine = require('./inference');
     return [hits.length ? hits : completions, line];
   };
 
-  // Create command-line interface
+
+  /**************************
+   * Command-line Interface *
+   **************************/
+  var engine = new InferenceEngine();
   var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -47,31 +53,29 @@ var InferenceEngine = require('./inference');
   rl.setPrompt('> ');
   rl.prompt();
 
+  // Define regex matches
+  var matchAllAre = /^all\s+([a-z\s])+\s+are\s+([a-z\s])+\.?$/g;
+  var matchNoAre = /^no\s+([a-z\s])+\s+are\s+([a-z\s])+\.?$/g;
+
+  // Define prompt cases
   rl.on('line', function(line) {
-    console.log(line.match(/^all\s+([a-z\s])+\s+are\s+([a-z\s])+\.?$/g));
-    switch (line.trim().toLowerCase()) {
+    line = line.trim().toLowerCase();
 
-      // Help message
-      case 'help':
-        displayHelpMessage();
-        break;
+    switch (true) {
 
-      // Teach: All NOUN are NOUN
-      case line.match(/^all\s+([a-z\s])+\s+are\s+([a-z\s])+\.?$/g)[0]:
-        // [TODO]
+      case matchAllAre.test(line):
         console.log('TEACH ALL');
         break;
 
-      // Teach: No NOUN are NOUN
-      case line.match(/^no\s+([a-z\s])+\s+are\s+([a-z\s])+\.?$/g)[0]:
-        // [TODO]
+      case matchNoAre.test(line):
         console.log('TEACH NO');
         break;
 
       default:
-        console.log('Hi ' + line);
+        console.log('I do not understand. Type "help" for help.');
         break;
     }
+
     console.log();
     rl.prompt();
 
