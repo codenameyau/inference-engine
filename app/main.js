@@ -24,6 +24,7 @@ var InferenceEngine = require('./inference');
     console.log('   > all dogs are mammals');
     console.log('   > all mammals are animals');
     console.log('   > are all dogs animals?');
+    console.log('\n\nQuit with "ctr + c"\n');
   };
 
 
@@ -35,6 +36,20 @@ var InferenceEngine = require('./inference');
     var hits = completions.filter(function(c) {
       return c.indexOf(line) === 0; });
     return [hits.length ? hits : completions, line];
+  };
+
+
+  /***************************
+   * Interface Regex Matches *
+   ***************************/
+  var matchHelp = /^help$/i;
+  var matchAllAre = /^all ([a-z\s]+) are ([a-z\s]+)\.?$/i;
+  var matchNoAre = /^no ([a-z\s]+) are ([a-z\s]+)\.?$/i;
+  var matchAreAll = /^are all ([a-z\s]+) ([a-z\s]+)\.?$/i;
+  var matchAreNo = /^are no ([a-z\s]+) ([a-z\s]+)\.?$/i;
+
+  var extractNouns = function(string, regex) {
+      return regex.exec(string);
   };
 
 
@@ -53,22 +68,33 @@ var InferenceEngine = require('./inference');
   rl.setPrompt('> ');
   rl.prompt();
 
-  // Define regex matches
-  var matchAllAre = /^all\s+([a-z\s])+\s+are\s+([a-z\s])+\.?$/g;
-  var matchNoAre = /^no\s+([a-z\s])+\s+are\s+([a-z\s])+\.?$/g;
-
   // Define prompt cases
   rl.on('line', function(line) {
     line = line.trim().toLowerCase();
+    var nouns;
 
     switch (true) {
 
+      case matchHelp.test(line):
+        displayHelpMessage();
+        break;
+
       case matchAllAre.test(line):
-        console.log('TEACH ALL');
+        nouns = extractNouns(line, matchAllAre);
+        engine.teachAllAre(nouns[1], nouns[2]);
+        console.log(engine.graph);
         break;
 
       case matchNoAre.test(line):
         console.log('TEACH NO');
+        break;
+
+      case matchAreAll.test(line):
+        console.log('QUERY ARE ALL');
+        break;
+
+      case matchAreNo.test(line):
+        console.log('QUERY ARE NO');
         break;
 
       default:

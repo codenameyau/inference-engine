@@ -285,6 +285,7 @@ describe('InferenceEngine', function() {
       assert.isFalse(engine.queryAreNo('dogs', 'animals'));
       assert.isFalse(engine.queryAreNo('animals', 'dogs'));
       assert.isFalse(engine.queryAreNo('animals', 'octopuses'));
+      assert.isFalse(engine.queryAreNo('octopuses', 'animals'));
     });
   });
 

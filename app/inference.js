@@ -79,6 +79,12 @@ InferenceEngine.prototype.teachEngine = function(nounA, nounB, truth) {
   // [TODO]: check for contradictions
   nounA = this.replaceSpaces(nounA);
   nounB = this.replaceSpaces(nounB);
+
+  // Add nouns if not exist
+  if (!this.hasNoun(nounA)) { this.addNoun(nounA); }
+  if (!this.hasNoun(nounB)) { this.addNoun(nounB); }
+
+  // Add edges
   var inverseA = this.inverse(nounA);
   var inverseB = this.inverse(nounB);
   this.graph.addEdge(nounA, nounB, truth[0]);
