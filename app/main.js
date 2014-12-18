@@ -5,22 +5,49 @@
  */
 'use strict';
 
+var readline = require('readline');
 var InferenceEngine = require('./inference');
 
 (function() {
 
+  // Create inference engine
   var engine = new InferenceEngine();
-  engine.addNoun('dogs');
-  engine.addNoun('cats');
-  engine.addNoun('mammals');
-  engine.addNoun('octopuses');
-  engine.teachAllAre('dogs', 'mammals');
-  engine.teachNoAre('dogs', 'cats');
-  engine.teachNoAre('octopuses', 'mammals');
 
-  // console.log(engine.graph);
-  // console.log(engine.queryAreNo('octopuses', 'dogs'));
-  // console.log(engine.queryAreSome('dogs', 'cats'));
-  console.log(engine.queryAreNo('dogs', 'mammals'));
+  // Define tab-completion
+  var tabCompletion = function(line) {
+    var completions = 'All No are'.split(' ');
+    var hits = completions.filter(function(c) {
+      return c.indexOf(line) === 0; });
+    return [hits.length ? hits : completions, line];
+  };
+
+  // Create command-line interface
+  var rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    completer: tabCompletion,
+  });
+
+  // Create the interactive interface
+  rl.write('Welcome to the inference engine demo! \nType "help" for help.\n\n');
+  rl.setPrompt('> ');
+  rl.prompt();
+
+  rl.on('line', function(line) {
+    switch (line.trim()) {
+      case 'help':
+        console.log('HELP');
+        break;
+      default:
+        console.log('Hi ' + line);
+        break;
+    }
+    console.log();
+    rl.prompt();
+
+  }).on('close', function() {
+    console.log('Have a great day!');
+    process.exit(0);
+  });
 
 })();
